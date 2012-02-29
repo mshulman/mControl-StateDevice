@@ -1,0 +1,99 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<mServerDb3 vendor="Niewenhuijse IT &amp; Scruzphreak" version="3.0.0" >
+
+  <!-- List of protocols supported by mServer -->
+  <Protocols>
+    <protocol name="PROT_STATEDEVICE" saveLevel="false" canEnroll="false" forcedAddressList="false" automationCmdsDelay="500" />
+  </Protocols>
+
+  <!-- List of adapters supported by mServer -->
+  <Adapters>
+    <adapter base="STATEDEVICE" load="Y" assembly="StateDevice.dll" driver="EmbeddedAutomation.mServer.Adapters.StateDeviceMgr" SupportedProtocols="PROT_STATEDEVICE">
+      <param name="DISPLAY-AS" value="State Device" />
+      <param name="Description" value="State Device" />
+      <param name="Port" value="(null)" />
+      <param name="DebugLevel" value="5" />
+    </adapter>
+  </Adapters>
+
+  <!-- List of devices supported by mServer -->
+  <Modules>
+    <module base="VARDEVICEMODULE" class="UNDEFINED" use="Y">
+      <param name="DISPLAY-AS" value="VarDevice" />
+      <param name="Description" value="Var Device"  />
+      <param name="MProtocol" value="PROT_STATEDEVICE" />
+      <param name="CmdBtnGrp" value="BTN_VARDEVICE" />
+      <param name="FieldsGrp" value="STATEDEVICE" />
+      <param name="ParamsGrp" value="PARAMS_VARDEVICE" />
+      <param name="DefaultImage" value="" />
+    </module>
+    <module base="DATEDEVICEMODULE" class="UNDEFINED" use="Y">
+      <param name="DISPLAY-AS" value="DateDevice" />
+      <param name="Description" value="Date Device" />
+      <param name="MProtocol" value="PROT_STATEDEVICE" />
+      <param name="CmdBtnGrp" value="BTN_DATEDEVICE" />
+      <param name="FieldsGrp" value="STATEDEVICE" />
+      <param name="ParamsGrp" value="PARAMS_DATEDEVICE" />
+      <param name="DefaultImage" value="" />
+    </module>
+    <module base="DELAYDEVICEMODULE" class="UNDEFINED" use="Y">
+      <param name="DISPLAY-AS" value="DelayDevice" />
+      <param name="Description" value="Delay Device" />
+      <param name="MProtocol" value="PROT_STATEDEVICE" />
+      <param name="CmdBtnGrp" value="BTN_DELAYDEVICE" />
+      <param name="FieldsGrp" value="DELAYDEVICE" />
+      <param name="ParamsGrp" value="PARAMS_DELAYDEVICE" />
+      <param name="DefaultImage" value="" />
+    </module>
+  </Modules>
+
+  <ModuleCommands>
+    <group name="BTN_VARDEVICE">
+      <command name="TOGGLE" label="Toggle State" uiClass="Toggle" />
+      <command name="TURNON" label="Turn On" uiClass="Toggle" />
+      <command name="TURNOFF" label="Turn Off" uiClass="Toggle" />
+      <command name="SETZERO" label="Set to zero" uiClass="Toggle" />
+      <command name="INCREMENT" label="Increment by 1" uiClass="Toggle" />
+      <command name="DECREMENT" label="Decrement by 1" uiClass="Toggle" />
+    </group>
+    <group name="BTN_DATEDEVICE">
+      <command name="CURRENT" label="Set current date" uiClass="Toggle" />
+    </group>
+    <group name="BTN_DELAYDEVICE">
+      <command name="START" label="Start" uiClass="Toggle" />
+      <command name="STOP" label="Stop" uiClass="Toggle" />
+    </group>
+  </ModuleCommands>
+
+  <ModuleProps>
+    <group name="PARAMS_VARDEVICE">
+      <property name="Change_State" ops="LT|LE|GT|GE|EQ" type="NUM" subType="int" values="0~999" devchg="true" devstat="false" />
+      <property name="Current_State" ops="LT|LE|GT|GE|EQ" type="NUM" subType="int" values="0~999" devchg="false" devstat="true" />
+    </group>
+    <group name="PARAMS_DATEDEVICE">
+      <property name="Month" ops="LT|LE|GT|GE|EQ" type="NUM" subType="int" values="1~12" devchg="true" devstat="true" />
+      <property name="Day" ops="LT|LE|GT|GE|EQ" type="NUM" subType="int" values="1~31" devchg="true" devstat="true" />
+      <property name="Year" ops="LT|LE|GT|GE|EQ" type="NUM" subType="int" values="2000~2100" devchg="true" devstat="true" />
+      <property name="DayOfWeekNum" ops="LT|LE|GT|GE|EQ" type="NUM" subType="int" values="1~7" devchg="true" devstat="true" />
+      <property name="DateIsOdd" ops="EQ" type="TEXT" values="TRUE|FALSE" devchg="true" devstat="true" />
+    </group>
+    <group name="PARAMS_DELAYDEVICE">
+      <property name="Current_State" ops="LT|LE|GT|GE|EQ" type="NUM" subType="int" values="0~2" devchg="true" devstat="true" />
+    </group>
+  </ModuleProps>
+
+  <ModuleFields>
+    <group name="STATEDEVICE">
+      <address addressPartsJoiner="">
+        <component label="Create an address. Address must be unique." type="TEXT" values="^[A-Za-z0-9]{1,15}$" />
+        <invalidAddrMsg>Address can't be blank. use an 'A'</invalidAddrMsg>
+      </address>
+    </group>
+    <group name="DELAYDEVICE">
+      <address refgrp="STATEDEVICE" />
+      <options>
+        <component label="Interval (seconds):" type="NUM" subType="int" values="0000~999999" />
+      </options>
+    </group>
+  </ModuleFields>
+</mServerDb3>
